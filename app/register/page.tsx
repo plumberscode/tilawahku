@@ -24,7 +24,7 @@ export default function RegisterPage() {
     setLoading(true);
     setError("");
 
-    const { data, error } = await authClient.signUp.email({
+    const { error } = await authClient.signUp.email({
       name,
       email,
       password,

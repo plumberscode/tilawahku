@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ChevronLeft,
   ChevronRight,
   ZoomIn,
   ZoomOut,
-  RotateCcw,
 } from "lucide-react";
 import { QuranPageData } from "@/lib/quran/types";
 import { MushafPage } from "./mushaf-page";
@@ -43,16 +43,20 @@ export function QuranReaderView({
   canGoPrev,
   canGoNext,
 }: QuranReaderViewProps) {
+  const router = useRouter();
   // Zoom scale state (default 1.0 = 100%)
   const [zoom, setZoom] = useState<number>(1.0);
   const [isMounted, setIsMounted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [sessionStartTime] = useState<number>(Date.now());
+  const [sessionStartTime, setSessionStartTime] = useState<number>(0);
   const [initialPage] = useState<number>(currentPage);
 
   // Load saved zoom level on client mount
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
+    setSessionStartTime(Date.now());
+    
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
@@ -90,7 +94,7 @@ export function QuranReaderView({
     if (hasUnconfirmedActivity) {
       setShowConfirmation(true);
     } else {
-      window.location.href = "/dashboard";
+      router.push("/dashboard");
     }
   };
 
@@ -251,7 +255,7 @@ export function QuranReaderView({
       isOpen={showConfirmation}
       onClose={() => setShowConfirmation(false)}
       onDiscard={() => {
-        window.location.href = "/dashboard";
+        router.push("/dashboard");
       }}
       verses={modalVerses}
       currentPage={currentPage}

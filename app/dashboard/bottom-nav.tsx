@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Home, BookOpen, Calendar, User, Sparkles } from "lucide-react";
+import { Home, BookOpen, Calendar, User } from "lucide-react";
 
 interface BottomNavProps {
   currentPage: number;

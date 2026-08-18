@@ -46,18 +46,6 @@ export function MushafPage({ pageData }: MushafPageProps) {
               dir="rtl"
               aria-label={`Quran Page ${pageData.pageNumber}`}
             >
-              {/* Surah Header if present (e.g. Page 2) */}
-              {pageData.hasSurahHeader && (
-                <SurahHeader
-                  surahNumber={pageData.surahNumber}
-                  surahNameArabic={pageData.surahNameArabic}
-                  surahNameSimple={pageData.surahNameSimple}
-                />
-              )}
-
-              {/* Bismillah if present (e.g. Page 2) */}
-              {pageData.hasBismillah && <Bismillah />}
-
               {/* 
                 Dynamic Line Grouping:
                 Renders whatever line numbers are returned by the API.
@@ -66,12 +54,27 @@ export function MushafPage({ pageData }: MushafPageProps) {
               */}
               <div className="w-full flex flex-col">
                 {pageData.lines.map((line) => {
+                  if (line.type === "surah_header") {
+                    return (
+                      <SurahHeader
+                        key={`header-${line.surahNumber}-${line.lineNumber}`}
+                        surahNumber={line.surahNumber!}
+                        surahNameArabic={line.surahNameArabic!}
+                        surahNameSimple={line.surahNameSimple!}
+                      />
+                    );
+                  }
+                  
+                  if (line.type === "bismillah") {
+                    return <Bismillah key={`bismillah-${line.lineNumber}`} />;
+                  }
+
                   // Only treat lines with very few words as incomplete/short lines (e.g. end of section)
                   const isShortLine = line.words.length < 6;
 
                   return (
                     <div
-                      key={line.lineNumber}
+                      key={`line-${line.lineNumber}`}
                       className={`mushaf-line flex items-center w-full min-h-[34px] sm:min-h-[44px] my-[1px] px-1 ${
                         isShortLine ? "justify-start gap-1.5 sm:gap-2" : "justify-between"
                       }`}

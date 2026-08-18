@@ -36,8 +36,8 @@ export async function saveInitialProgress(
 ): Promise<UserProgress> {
   const safePage = Math.min(Math.max(0, completedPage), 604);
 
-  let initialPage = safePage;
-  let completedPages = safePage;
+  const initialPage = safePage;
+  const completedPages = safePage;
   let currentPage = 1;
   let isCompleted = false;
 
@@ -162,8 +162,6 @@ export async function saveConfirmedReading(
 
   // 4. Update Reading Progress
   if (existing) {
-    const completedPages = Math.max(existing.completedPages, pageNumber - 1); // atau ikuti pageNumber (bukan highest)
-    
     const [updated] = await db
       .update(readingProgress)
       .set({

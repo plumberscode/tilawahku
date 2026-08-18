@@ -10,6 +10,8 @@ import { MurojaahPlanModal } from "./murojaah-plan-modal";
 import { completeMurojaahPlanAction } from "@/app/actions/murojaah";
 import { useRouter } from "next/navigation";
 
+import { SURAH_MAP } from "@/lib/quran/surahs-data";
+
 interface MurojaahFocusViewProps {
   plan: MurojaahPlan;
   pageData: QuranPageData;
@@ -20,6 +22,18 @@ export function MurojaahFocusView({ plan, pageData }: MurojaahFocusViewProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompleting, setIsCompleting] = useState(false);
   const [isCompletedState, setIsCompletedState] = useState(plan.completed);
+
+  const startSurahInfo = plan ? SURAH_MAP[plan.surahNumber] : null;
+  const endSurahInfo = plan && plan.endSurahNumber ? SURAH_MAP[plan.endSurahNumber] : startSurahInfo;
+  const isMultiSurah = plan && plan.endSurahNumber && plan.endSurahNumber !== plan.surahNumber;
+
+  const bannerTitle = isMultiSurah
+    ? `Mode Murojaah: ${startSurahInfo?.nameSimple} & ${endSurahInfo?.nameSimple}`
+    : `Mode Murojaah: ${startSurahInfo?.nameSimple || pageData.surahNameSimple}`;
+
+  const bannerSubtitle = isMultiSurah
+    ? `${startSurahInfo?.nameSimple} (${plan.startVerse}) – ${endSurahInfo?.nameSimple} (${plan.endVerse}) (Hal. ${plan.pageNumber})`
+    : `Ayat ${plan.startVerse} – ${plan.endVerse} (Hal. ${plan.pageNumber})`;
 
   const handleComplete = async () => {
     if (isCompleting) return;
@@ -69,11 +83,11 @@ export function MurojaahFocusView({ plan, pageData }: MurojaahFocusViewProps) {
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-[#8B65C9]" />
             <span className="font-bold text-[#734BB8]">
-              Mode Murojaah: {pageData.surahNameSimple}
+              {bannerTitle}
             </span>
           </div>
           <span className="text-[#6A6054] font-medium">
-            Ayat {plan.startVerse} – {plan.endVerse} (Hal. {plan.pageNumber})
+            {bannerSubtitle}
           </span>
         </div>
 
@@ -128,6 +142,8 @@ export function MurojaahFocusView({ plan, pageData }: MurojaahFocusViewProps) {
         initialPage={plan.pageNumber}
         initialStartVerse={plan.startVerse}
         initialEndVerse={plan.endVerse}
+        initialSurahNumber={plan.surahNumber}
+        initialEndSurahNumber={plan.endSurahNumber ?? undefined}
         onSuccess={() => {
           router.refresh();
         }}

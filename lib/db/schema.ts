@@ -96,6 +96,7 @@ export const murojaahPlan = pgTable("murojaah_plan", {
 	userId: text("user_id").notNull().unique().references(() => user.id, { onDelete: "cascade" }),
 	pageNumber: integer("page_number").notNull(),
 	surahNumber: integer("surah_number").notNull(),
+	endSurahNumber: integer("end_surah_number"),
 	startVerse: integer("start_verse").notNull(),
 	endVerse: integer("end_verse").notNull(),
 	completed: boolean("completed").notNull().default(false),

@@ -23,7 +23,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { data, error } = await authClient.signIn.email({
+    const { error } = await authClient.signIn.email({
       email,
       password,
     });

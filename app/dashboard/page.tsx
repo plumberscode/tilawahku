@@ -8,7 +8,6 @@ import {
   ArrowRight,
   BarChart2,
   Calendar,
-  ChevronRight,
   Check,
   Minus,
   Sparkles,

@@ -9,11 +9,27 @@ import {
   Loader2,
   Check,
   BookOpen,
-  Sparkles,
 } from "lucide-react";
 import { saveMurojaahPlanAction, getPageVersesAction } from "@/app/actions/murojaah";
 import { SURAHS, getSurahByPage, getJuzByPage, JUZ_PAGE_STARTS } from "@/lib/quran/surahs-data";
 import { useRouter } from "next/navigation";
+
+interface VerseItem {
+  id: number;
+  verseNumber: number;
+  verseKey: string;
+  surahNumber: number;
+  surahNameSimple: string;
+  pageNumber: number;
+}
+
+interface SurahPageItem {
+  number: number;
+  nameSimple: string;
+  nameArabic: string;
+  startVerse: number;
+  endVerse: number;
+}
 
 interface MurojaahPlanModalProps {
   isOpen: boolean;
@@ -21,6 +37,8 @@ interface MurojaahPlanModalProps {
   initialPage?: number;
   initialStartVerse?: number;
   initialEndVerse?: number;
+  initialSurahNumber?: number;
+  initialEndSurahNumber?: number;
   onSuccess?: () => void;
 }
 
@@ -30,20 +48,32 @@ export function MurojaahPlanModal({
   initialPage = 2,
   initialStartVerse,
   initialEndVerse,
+  initialSurahNumber,
+  initialEndSurahNumber,
   onSuccess,
 }: MurojaahPlanModalProps) {
   const router = useRouter();
 
   const [pageNumber, setPageNumber] = useState<number>(initialPage);
-  const [startVerse, setStartVerse] = useState<number>(initialStartVerse || 1);
-  const [endVerse, setEndVerse] = useState<number>(initialEndVerse || 1);
+  const [startVerseIndex, setStartVerseIndex] = useState<number>(0);
+  const [endVerseIndex, setEndVerseIndex] = useState<number>(0);
 
   const [isLoadingVerses, setIsLoadingVerses] = useState(false);
-  const [availableVerses, setAvailableVerses] = useState<{ id: number; verseNumber: number; verseKey: string }[]>([]);
-  const [surahNumber, setSurahNumber] = useState<number>(1);
-  const [surahName, setSurahName] = useState<string>("Al-Fatihah");
+  const [availableVerses, setAvailableVerses] = useState<VerseItem[]>([]);
+  const [pageSurahs, setPageSurahs] = useState<SurahPageItem[]>([]);
+  const [selectedSurahFilter, setSelectedSurahFilter] = useState<number | "all">("all");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const hasInitializedRef = React.useRef(false);
+
+  // Sync state with props when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setPageNumber(initialPage);
+      hasInitializedRef.current = false;
+    }
+  }, [isOpen, initialPage]);
 
   // Load verses whenever pageNumber changes
   useEffect(() => {
@@ -53,16 +83,69 @@ export function MurojaahPlanModal({
       setIsLoadingVerses(true);
       try {
         const res = await getPageVersesAction(pageNumber);
-        if (!isCancelled && res.success && res.verses) {
-          setAvailableVerses(res.verses);
-          setSurahNumber(res.surahNumber || 1);
-          setSurahName(res.surahNameSimple || "Surah");
+        if (!isCancelled && res.success && res.verses && res.verses.length > 0) {
+          const verses = res.verses as VerseItem[];
+          const surahs = (res.surahs as SurahPageItem[]) || [];
 
-          const firstVerseNum = res.verses[0]?.verseNumber || 1;
-          const lastVerseNum = res.verses[res.verses.length - 1]?.verseNumber || 1;
+          setAvailableVerses(verses);
+          setPageSurahs(surahs);
 
-          setStartVerse(firstVerseNum);
-          setEndVerse(lastVerseNum);
+          if (
+            !hasInitializedRef.current &&
+            pageNumber === initialPage &&
+            initialStartVerse &&
+            initialEndVerse
+          ) {
+            // Match based on verse numbers (and surah if provided)
+            let sIdx = verses.findIndex(
+              (v) =>
+                v.verseNumber === initialStartVerse &&
+                (!initialSurahNumber || v.surahNumber === initialSurahNumber)
+            );
+            if (sIdx === -1) sIdx = 0;
+
+            let eIdx = verses.findLastIndex(
+              (v) =>
+                v.verseNumber === initialEndVerse &&
+                (!initialEndSurahNumber || v.surahNumber === initialEndSurahNumber)
+            );
+            if (eIdx === -1 || eIdx < sIdx) eIdx = verses.length - 1;
+
+            setStartVerseIndex(sIdx);
+            setEndVerseIndex(eIdx);
+
+            // Determine if selection matches a specific surah
+            const startV = verses[sIdx];
+            const endV = verses[eIdx];
+            if (
+              startV &&
+              endV &&
+              startV.surahNumber === endV.surahNumber &&
+              surahs.length > 1
+            ) {
+              const matchedSurah = surahs.find((s) => s.number === startV.surahNumber);
+              if (
+                matchedSurah &&
+                matchedSurah.startVerse === startV.verseNumber &&
+                matchedSurah.endVerse === endV.verseNumber
+              ) {
+                setSelectedSurahFilter(matchedSurah.number);
+              } else {
+                setSelectedSurahFilter("all");
+              }
+            } else {
+              setSelectedSurahFilter("all");
+            }
+
+            hasInitializedRef.current = true;
+          } else {
+            setStartVerseIndex(0);
+            setEndVerseIndex(verses.length - 1);
+            setSelectedSurahFilter("all");
+            if (pageNumber === initialPage) {
+              hasInitializedRef.current = true;
+            }
+          }
         }
       } catch (err) {
         console.error("Error loading verses for page:", err);
@@ -80,7 +163,7 @@ export function MurojaahPlanModal({
     return () => {
       isCancelled = true;
     };
-  }, [pageNumber, isOpen]);
+  }, [pageNumber, isOpen, initialPage, initialStartVerse, initialEndVerse, initialSurahNumber, initialEndSurahNumber]);
 
   if (!isOpen) return null;
 
@@ -129,16 +212,37 @@ export function MurojaahPlanModal({
     setPageNumber(next);
   };
 
+  const handleChipSelect = (filter: number | "all") => {
+    setSelectedSurahFilter(filter);
+    if (availableVerses.length === 0) return;
+
+    if (filter === "all") {
+      setStartVerseIndex(0);
+      setEndVerseIndex(availableVerses.length - 1);
+    } else {
+      const sIdx = availableVerses.findIndex((v) => v.surahNumber === filter);
+      const eIdx = availableVerses.findLastIndex((v) => v.surahNumber === filter);
+      if (sIdx !== -1 && eIdx !== -1) {
+        setStartVerseIndex(sIdx);
+        setEndVerseIndex(eIdx);
+      }
+    }
+  };
+
+  const selectedStartVerse = availableVerses[startVerseIndex] || availableVerses[0];
+  const selectedEndVerse = availableVerses[endVerseIndex] || availableVerses[availableVerses.length - 1];
+
   const handleSubmit = async () => {
-    if (isSubmitting || availableVerses.length === 0) return;
+    if (isSubmitting || !selectedStartVerse || !selectedEndVerse) return;
     setIsSubmitting(true);
 
     try {
       const res = await saveMurojaahPlanAction({
         pageNumber,
-        surahNumber,
-        startVerse,
-        endVerse: Math.max(startVerse, endVerse),
+        surahNumber: selectedStartVerse.surahNumber,
+        endSurahNumber: selectedEndVerse.surahNumber,
+        startVerse: selectedStartVerse.verseNumber,
+        endVerse: selectedEndVerse.verseNumber,
       });
 
       if (res.success) {
@@ -155,6 +259,24 @@ export function MurojaahPlanModal({
       setIsSubmitting(false);
     }
   };
+
+  // Build header text for Section 1 badge
+  const headerSurahBadge =
+    pageSurahs.length > 1
+      ? pageSurahs.map((s) => s.nameSimple).join(" & ")
+      : pageSurahs.length === 1
+      ? pageSurahs[0].nameSimple
+      : currentSurah.nameSimple;
+
+  // Build target summary string
+  let targetSummaryText = "";
+  if (selectedStartVerse && selectedEndVerse) {
+    if (selectedStartVerse.surahNumber === selectedEndVerse.surahNumber) {
+      targetSummaryText = `Surah ${selectedStartVerse.surahNameSimple} Ayat ${selectedStartVerse.verseNumber} – ${selectedEndVerse.verseNumber} (Halaman ${pageNumber})`;
+    } else {
+      targetSummaryText = `${selectedStartVerse.surahNameSimple} (${selectedStartVerse.verseNumber}) – ${selectedEndVerse.surahNameSimple} (${selectedEndVerse.verseNumber}) (Halaman ${pageNumber})`;
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -298,7 +420,7 @@ export function MurojaahPlanModal({
             {/* Live Surah & Juz Badge */}
             <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-[#FAF7FD] border border-[#ECE4F7] text-xs">
               <span className="font-bold text-[#734BB8]">
-                Surah {currentSurah.nameSimple}
+                Surah {headerSurahBadge}
               </span>
               <span className="text-[#8A8178]">Juz {currentJuz}</span>
             </div>
@@ -317,6 +439,40 @@ export function MurojaahPlanModal({
               )}
             </div>
 
+            {/* Alternatif 1: Segmented Surah Quick Selector Chips (if page has >1 surahs) */}
+            {!isLoadingVerses && pageSurahs.length > 1 && (
+              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-[#F5EFE6] border border-[#E8DFD3]">
+                {/* Chip: Semua Ayat */}
+                <button
+                  type="button"
+                  onClick={() => handleChipSelect("all")}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    selectedSurahFilter === "all"
+                      ? "bg-white text-[#734BB8] shadow-xs"
+                      : "text-[#6A6054] hover:text-[#2C261F] hover:bg-white/50"
+                  }`}
+                >
+                  Semua di Hal. {pageNumber}
+                </button>
+
+                {/* Chips for each specific Surah */}
+                {pageSurahs.map((surah) => (
+                  <button
+                    key={surah.number}
+                    type="button"
+                    onClick={() => handleChipSelect(surah.number)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      selectedSurahFilter === surah.number
+                        ? "bg-white text-[#734BB8] shadow-xs"
+                        : "text-[#6A6054] hover:text-[#2C261F] hover:bg-white/50"
+                    }`}
+                  >
+                    {surah.nameSimple} ({surah.startVerse}–{surah.endVerse})
+                  </button>
+                ))}
+              </div>
+            )}
+
             {isLoadingVerses ? (
               <div className="p-6 rounded-2xl bg-white border border-[#E5DDD3] flex items-center justify-center gap-2 text-xs text-[#8A8178]">
                 <Loader2 className="w-4 h-4 animate-spin text-[#8B65C9]" />
@@ -330,19 +486,22 @@ export function MurojaahPlanModal({
                     Ayat Awal:
                   </span>
                   <select
-                    value={startVerse}
+                    value={startVerseIndex}
                     onChange={(e) => {
-                      const val = parseInt(e.target.value, 10);
-                      setStartVerse(val);
-                      if (val > endVerse) {
-                        setEndVerse(val);
+                      const idx = parseInt(e.target.value, 10);
+                      setStartVerseIndex(idx);
+                      if (idx > endVerseIndex) {
+                        setEndVerseIndex(idx);
                       }
+                      setSelectedSurahFilter("all");
                     }}
                     className="w-full px-3 py-2.5 rounded-xl border border-[#E5DDD3] bg-white text-xs sm:text-sm font-semibold text-[#2C261F] focus:outline-none focus:border-[#8B65C9] cursor-pointer"
                   >
-                    {availableVerses.map((v) => (
-                      <option key={v.verseKey} value={v.verseNumber}>
-                        Ayat {v.verseNumber}
+                    {availableVerses.map((v, idx) => (
+                      <option key={`start-${v.verseKey}`} value={idx}>
+                        {pageSurahs.length > 1
+                          ? `${v.surahNameSimple}: Ayat ${v.verseNumber}`
+                          : `Ayat ${v.verseNumber}`}
                       </option>
                     ))}
                   </select>
@@ -354,19 +513,22 @@ export function MurojaahPlanModal({
                     Ayat Akhir:
                   </span>
                   <select
-                    value={endVerse}
+                    value={endVerseIndex}
                     onChange={(e) => {
-                      const val = parseInt(e.target.value, 10);
-                      setEndVerse(val);
-                      if (val < startVerse) {
-                        setStartVerse(val);
+                      const idx = parseInt(e.target.value, 10);
+                      setEndVerseIndex(idx);
+                      if (idx < startVerseIndex) {
+                        setStartVerseIndex(idx);
                       }
+                      setSelectedSurahFilter("all");
                     }}
                     className="w-full px-3 py-2.5 rounded-xl border border-[#E5DDD3] bg-white text-xs sm:text-sm font-semibold text-[#2C261F] focus:outline-none focus:border-[#8B65C9] cursor-pointer"
                   >
-                    {availableVerses.map((v) => (
-                      <option key={v.verseKey} value={v.verseNumber}>
-                        Ayat {v.verseNumber}
+                    {availableVerses.map((v, idx) => (
+                      <option key={`end-${v.verseKey}`} value={idx}>
+                        {pageSurahs.length > 1
+                          ? `${v.surahNameSimple}: Ayat ${v.verseNumber}`
+                          : `Ayat ${v.verseNumber}`}
                       </option>
                     ))}
                   </select>
@@ -386,7 +548,7 @@ export function MurojaahPlanModal({
               <div className="flex flex-col text-xs">
                 <span className="text-[#8A8178]">Target yang akan disimpan:</span>
                 <span className="font-bold text-[#734BB8] text-sm">
-                  {surahName} Ayat {startVerse} – {endVerse} (Halaman {pageNumber})
+                  {targetSummaryText}
                 </span>
               </div>
             </div>

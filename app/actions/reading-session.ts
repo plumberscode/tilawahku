@@ -34,8 +34,9 @@ export async function confirmReadingSessionAction(data: {
     );
 
     return { success: true, progress };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error confirming reading session:", error);
-    return { success: false, error: error.message || "Failed to save reading session" };
+    const message = error instanceof Error ? error.message : String(error);
+    return { success: false, error: message || "Failed to save reading session" };
   }
 }

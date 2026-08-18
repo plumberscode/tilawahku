@@ -131,7 +131,46 @@ export async function getQuranPage(pageNumber: number = 2): Promise<QuranPageDat
     lineNumber: lineNum,
     pageNumber: safePageNumber,
     words: lineMap.get(lineNum)!,
+    type: "words",
   }));
+
+  // Inject Surah Headers and Bismillahs exactly where they belong
+  const versesWithStart = verses.filter(v => v.verseNumber === 1);
+  for (let i = versesWithStart.length - 1; i >= 0; i--) {
+    const v1 = versesWithStart[i];
+    const [surahStr] = v1.verseKey.split(":");
+    const surahNum = parseInt(surahStr, 10);
+    const surahMeta = SURAH_MAP[surahNum];
+    
+    const firstWordLine = v1.words[0]?.lineNumber;
+    if (!firstWordLine) continue;
+
+    const insertionIndex = lines.findIndex(l => l.lineNumber === firstWordLine);
+    if (insertionIndex === -1) continue;
+
+    const headerLines: QuranLine[] = [];
+    
+    headerLines.push({
+      lineNumber: firstWordLine - 0.2,
+      pageNumber: safePageNumber,
+      words: [],
+      type: "surah_header",
+      surahNumber: surahNum,
+      surahNameArabic: surahMeta.nameArabic,
+      surahNameSimple: surahMeta.nameSimple,
+    });
+
+    if (surahNum !== 9 && surahNum !== 1) {
+      headerLines.push({
+        lineNumber: firstWordLine - 0.1,
+        pageNumber: safePageNumber,
+        words: [],
+        type: "bismillah",
+      });
+    }
+
+    lines.splice(insertionIndex, 0, ...headerLines);
+  }
 
   // Extract Surah & Juz metadata from first verse
   const firstVerse = verses[0];
@@ -149,12 +188,6 @@ export async function getQuranPage(pageNumber: number = 2): Promise<QuranPageDat
     revelationPlace: "makkah" as const,
   };
 
-  // Determine if this page contains the start of a Surah
-  const startsSurah = verses.some((v) => v.verseNumber === 1);
-  const hasSurahHeader = startsSurah;
-  // Surah At-Tawbah (9) does not have Bismillah; Surah Al-Fatihah (1) has Bismillah as verse 1
-  const hasBismillah = startsSurah && surahNumber !== 9 && surahNumber !== 1;
-
   return {
     pageNumber: safePageNumber,
     juzNumber,
@@ -163,7 +196,7 @@ export async function getQuranPage(pageNumber: number = 2): Promise<QuranPageDat
     surahNameSimple: surahMeta.nameSimple,
     verses,
     lines,
-    hasBismillah,
-    hasSurahHeader,
+    hasBismillah: false, // deprecated by line injection
+    hasSurahHeader: false, // deprecated by line injection
   };
 }

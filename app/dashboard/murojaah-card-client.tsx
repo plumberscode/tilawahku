@@ -14,7 +14,18 @@ interface MurojaahCardClientProps {
 export function MurojaahCardClient({ plan }: MurojaahCardClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const surahInfo = plan ? SURAH_MAP[plan.surahNumber] : null;
+  const startSurahInfo = plan ? SURAH_MAP[plan.surahNumber] : null;
+  const endSurahInfo = plan && plan.endSurahNumber ? SURAH_MAP[plan.endSurahNumber] : startSurahInfo;
+
+  const isMultiSurah = plan && plan.endSurahNumber && plan.endSurahNumber !== plan.surahNumber;
+
+  const titleText = isMultiSurah
+    ? `${startSurahInfo?.nameSimple || `Surah ${plan.surahNumber}`} & ${endSurahInfo?.nameSimple || `Surah ${plan.endSurahNumber}`}`
+    : `Surah ${startSurahInfo?.nameSimple || (plan ? `Surah ${plan.surahNumber}` : "")}`;
+
+  const subtitleText = isMultiSurah
+    ? `${startSurahInfo?.nameSimple} (${plan.startVerse}) – ${endSurahInfo?.nameSimple} (${plan.endVerse}) • Hal. ${plan.pageNumber}`
+    : `Ayat ${plan?.startVerse} – ${plan?.endVerse} • Halaman ${plan?.pageNumber}`;
 
   return (
     <>
@@ -78,10 +89,10 @@ export function MurojaahCardClient({ plan }: MurojaahCardClientProps) {
 
               <div className="flex flex-col">
                 <span className="text-sm sm:text-base font-bold text-[#2C261F]">
-                  Surah {surahInfo?.nameSimple || `Surah ${plan.surahNumber}`}
+                  {titleText}
                 </span>
                 <span className="text-xs font-semibold text-[#5A5044]">
-                  Ayat {plan.startVerse} – {plan.endVerse} • Halaman {plan.pageNumber}
+                  {subtitleText}
                 </span>
                 <span className="text-[11px] text-[#8A8178] mt-0.5">
                   Ulangi dan kuatkan ingatanmu
@@ -107,6 +118,8 @@ export function MurojaahCardClient({ plan }: MurojaahCardClientProps) {
         initialPage={plan?.pageNumber || 2}
         initialStartVerse={plan?.startVerse}
         initialEndVerse={plan?.endVerse}
+        initialSurahNumber={plan?.surahNumber}
+        initialEndSurahNumber={plan?.endSurahNumber ?? undefined}
       />
     </>
   );

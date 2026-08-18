@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, X, Bookmark, Loader2 } from "lucide-react";
+import { Check, Bookmark, Loader2 } from "lucide-react";
 import { confirmReadingSessionAction } from "@/app/actions/reading-session";
 import { QuranVerse } from "@/lib/quran/types";
 import { SURAH_MAP } from "@/lib/quran/surahs-data";

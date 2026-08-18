@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Search,
   Sparkles,
-  ChevronRight,
   CheckCircle2,
   HelpCircle,
 } from "lucide-react";

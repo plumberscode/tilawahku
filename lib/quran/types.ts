@@ -35,6 +35,10 @@ export interface QuranLine {
   lineNumber: number;
   pageNumber: number;
   words: QuranWord[];
+  type?: "words" | "surah_header" | "bismillah";
+  surahNumber?: number;
+  surahNameArabic?: string;
+  surahNameSimple?: string;
 }
 
 export interface QuranPageData {

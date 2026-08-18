@@ -24,7 +24,7 @@ export default async function QuranReaderPage({ searchParams }: PageProps) {
   const leftPageNum = Math.min(rightPageNum + 1, 604);
 
   // Fetch page data
-  let primaryPageData = await getQuranPage(currentPage);
+  const primaryPageData = await getQuranPage(currentPage);
   let rightPageData = primaryPageData;
   let leftPageData = null;
 

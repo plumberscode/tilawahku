@@ -25,11 +25,13 @@ export async function saveMurojaahPlan(
   data: {
     pageNumber: number;
     surahNumber: number;
+    endSurahNumber?: number;
     startVerse: number;
     endVerse: number;
   }
 ): Promise<MurojaahPlan> {
   const existing = await getMurojaahPlan(userId);
+  const endSurahNumber = data.endSurahNumber ?? data.surahNumber;
 
   if (existing) {
     const [updated] = await db
@@ -37,6 +39,7 @@ export async function saveMurojaahPlan(
       .set({
         pageNumber: data.pageNumber,
         surahNumber: data.surahNumber,
+        endSurahNumber,
         startVerse: data.startVerse,
         endVerse: data.endVerse,
         completed: false,
@@ -56,6 +59,7 @@ export async function saveMurojaahPlan(
       userId,
       pageNumber: data.pageNumber,
       surahNumber: data.surahNumber,
+      endSurahNumber,
       startVerse: data.startVerse,
       endVerse: data.endVerse,
       completed: false,
