@@ -8,53 +8,54 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-Siap. Aku susun dengan prinsip bahwa `AGENTS.md` ini menjadi **source of truth untuk coding agent**: bukan cuma aturan coding, tapi juga konteks produk dan keputusan UX yang sudah kita sepakati.
-
-# CatatanTilawah.com — Agent Guidelines
+# TilawahKu — Agent Guidelines
 
 ## 1. Product Overview
 
-CatatanTilawah.com adalah web app untuk membantu pengguna mencatat, melihat, dan menjaga konsistensi membaca Al-Qur'an.
+TilawahKu adalah web app untuk membantu pengguna mencatat, melihat, dan menjaga konsistensi tilawah Al-Qur'an.
 
-Produk ini bukan sekadar tracker atau database pencatatan bacaan. Tujuan utamanya adalah menciptakan pengalaman yang membuat pengguna:
+Produk ini bukan sekadar tracker atau database pencatatan.
 
-* senang menggunakan aplikasi,
-* merasa didukung,
-* dapat melihat perjalanan tilawah mereka secara visual,
-* termotivasi untuk kembali membaca Al-Qur'an,
-* tidak merasa dihakimi atau ditekan ketika progresnya tidak konsisten.
+Tujuan utama produk:
 
-### Product Principle
+* membuat pengguna senang menggunakan aplikasi,
+* membuat pengguna merasa didukung,
+* membantu pengguna melihat perjalanan tilawah secara visual,
+* memotivasi pengguna untuk kembali membaca Al-Qur'an,
+* membantu murojaah,
+* menghindari pengalaman yang terasa menghakimi atau menekan.
+
+### Core Product Principle
 
 > **Support, not pressure.**
 
-CatatanTilawah harus terasa seperti teman yang mendukung perjalanan tilawah pengguna, bukan aplikasi yang menilai atau menyalahkan mereka.
+TilawahKu harus terasa seperti teman yang mendukung perjalanan tilawah, bukan aplikasi yang menilai pengguna.
 
 ---
 
-## 2. Core UX Principles
+# 2. UX Principles
 
 Semua keputusan UI/UX harus mengikuti prinsip berikut.
 
-### Calm
+## Calm
 
-Interface harus terasa tenang, bersih, dan tidak ramai.
+Interface harus tenang, bersih, dan tidak ramai.
 
 Hindari:
 
 * terlalu banyak warna,
 * terlalu banyak badge,
 * terlalu banyak angka,
-* animasi yang mengganggu,
+* animasi berlebihan,
 * visual hierarchy yang membingungkan.
 
-### Warm
+## Warm
 
-Gunakan visual yang terasa hangat, ramah, dan welcoming.
+Gunakan visual yang hangat, ramah, dan welcoming.
 
-### Encouraging
+## Encouraging
 
-Progress harus mendorong pengguna untuk melanjutkan.
+Progress harus memberikan motivasi.
 
 Gunakan bahasa seperti:
 
@@ -63,43 +64,48 @@ Gunakan bahasa seperti:
 * "Yuk, lanjut lagi."
 * "Masya Allah, perjalananmu sudah ..."
 
-Hindari bahasa yang terasa menghakimi seperti:
+Hindari bahasa yang menghakimi:
 
 * "Kamu tertinggal."
 * "Target belum tercapai."
 * "Kamu gagal menjaga streak."
 
-### Focused
+## Focused
 
-Setiap halaman atau layar harus mempunyai satu tujuan utama.
+Setiap layar mempunyai satu tujuan utama.
 
 > One screen, one primary goal.
 
-### Delightful
+## Delightful
 
 Gunakan ilustrasi, animasi, dan micro-interaction untuk memberikan rasa menyenangkan.
 
 Namun:
 
-> Delight should support the Quran-reading experience, never compete with it.
+> Delight must support the Quran-reading experience, never compete with it.
 
 ---
 
-## 3. Core Product Concepts
+# 3. Core Activities
 
-Ada dua aktivitas utama dalam CatatanTilawah.
+TilawahKu memiliki dua aktivitas utama.
 
-### 3.1 Tilawah Runtun
+## 3.1 Tilawah Runtun
 
-Pengguna membaca Al-Qur'an secara berurutan dari awal hingga akhir.
+Pengguna membaca Al-Qur'an secara berurutan.
 
 Contoh:
 
-Al-Baqarah ayat 1 → ayat berikutnya → halaman berikutnya → dan seterusnya.
+```text
+Al-Baqarah ayat 1
+→ ayat berikutnya
+→ halaman berikutnya
+→ seterusnya
+```
 
-Sistem harus dapat mengetahui posisi bacaan pengguna.
+Sistem harus dapat mengetahui posisi terakhir pengguna.
 
-### 3.2 Murojaah
+## 3.2 Murojaah
 
 Murojaah adalah aktivitas mengulang hafalan Al-Qur'an.
 
@@ -108,59 +114,58 @@ Murojaah memiliki dua konteks:
 1. Mengulang hafalan yang sudah dimiliki.
 2. Mengulang hafalan baru / tambahan hafalan.
 
-Kedua aktivitas tersebut merupakan bagian dari satu perjalanan ibadah pengguna, bukan sekadar dua fitur yang berdiri sendiri.
+Keduanya merupakan bagian dari satu perjalanan ibadah pengguna.
 
 ---
 
-## 4. Dashboard Philosophy
+# 4. Dashboard Philosophy
 
-Setelah login, jangan memaksa pengguna memilih mode setiap kali membuka aplikasi.
+Setelah login, jangan meminta pengguna memilih mode setiap kali membuka aplikasi.
 
-Jangan membuat flow seperti:
+Jangan membuat flow wajib:
 
 > "Mau Tilawah atau Murojaah?"
 
-sebagai pertanyaan wajib setiap kali membuka aplikasi.
-
-Sebaliknya, dashboard harus memahami konteks pengguna dan menampilkan aktivitas yang relevan.
+Dashboard harus memahami konteks pengguna dan menampilkan aktivitas yang relevan.
 
 Contoh:
 
-> "Assalamualaikum, Henry 👋"
+> Assalamualaikum 👋
+> Yuk lanjutkan tilawahmu.
 
-> "Yuk lanjutkan tilawahmu."
-
-Kemudian tampilkan aktivitas yang dapat dilanjutkan.
-
-Contoh:
+Kemudian:
 
 * Lanjutkan Tilawah
 * Murojaah hari ini
 * Progress perjalanan tilawah
 
-Jika pengguna terakhir menggunakan Tilawah, prioritaskan "Lanjutkan Tilawah".
+Jika pengguna terakhir melakukan tilawah, prioritaskan "Lanjutkan Tilawah".
 
-Jika pengguna lebih aktif melakukan murojaah, tampilkan aktivitas murojaah secara relevan.
+Jika pengguna memiliki murojaah yang perlu dilakukan, tampilkan secara relevan tanpa mengalahkan primary action.
 
 ---
 
-## 5. Homepage / Landing Page
+# 5. Homepage
 
 Homepage adalah halaman sebelum login.
 
-Tujuan utamanya adalah memberikan welcome moment yang sederhana dan menyenangkan.
+Tujuan homepage:
 
-### Struktur utama
+> Membuat pengguna merasa disambut dan ingin melanjutkan tilawah.
 
-Urutan elemen:
+Homepage harus sederhana.
 
-1. Ilustrasi Quran
+### Struktur
+
+Urutan utama:
+
+1. Hero illustration / animation
 2. Headline
 3. Supporting text
-4. Primary Login button
-5. Google login
+4. Login
+5. Google
 6. Privacy reassurance
-7. Link daftar akun
+7. Registration
 
 Headline:
 
@@ -170,11 +175,11 @@ Supporting text:
 
 > Catat, lacak, dan jaga konsistensi bacaan Quran setiap hari.
 
-CTA:
+Primary CTA:
 
 > Login
 
-Social login:
+Google:
 
 > Google
 
@@ -182,139 +187,380 @@ Registration:
 
 > Belum punya akun? Daftar
 
-Privacy reassurance:
+Privacy:
 
 > Data aman dan hanya untukmu
 
-### Visual
-
-Homepage menggunakan:
-
-* warm cream background,
-* ilustrasi Quran,
-* ilustrasi tanaman,
-* lantern,
-* Islamic arch,
-* decorative stars/hearts/sparkles,
-* banyak whitespace,
-* visual yang lembut dan tidak agresif.
-
-Background utama:
+### Background
 
 ```text
 #FBF4EE
 ```
 
-### Illustration Rules
+### Hero
 
-Ilustrasi harus:
+Homepage menggunakan animasi Quran yang lembut.
 
-* clean,
-* friendly,
-* soft,
-* Islamic-inspired,
-* tidak berlebihan,
-* mudah dipisahkan dari UI jika diperlukan.
+Video:
 
-Quran **tidak boleh memiliki mata, mulut, atau lingkaran merah/pipi**.
+* autoplay,
+* muted,
+* loop,
+* playsInline,
+* no controls,
+* no audio.
 
-Jangan mengubah Quran menjadi karakter dengan wajah.
+Gunakan WebM jika tersedia dan MP4 sebagai fallback.
 
-Elemen ilustrasi tidak perlu memiliki bayangan berat. Flat/soft illustration lebih disukai agar mudah digunakan sebagai asset frontend.
+Jika `prefers-reduced-motion` aktif, gunakan static image.
 
 ---
 
-## 6. Authentication UX
+# 6. Authentication UX
 
-Login harus sesingkat mungkin.
+Authentication harus sesingkat mungkin.
 
-Primary action:
+Primary:
 
 > Login
 
-Alternative:
+Secondary:
 
 > Google
 
-Untuk user yang belum memiliki akun:
+Registration:
 
 > Belum punya akun? Daftar
 
-Jangan meminta informasi yang belum dibutuhkan.
+Jangan menggunakan Apple login.
 
-### Registration Principle
+Jangan meminta data yang belum dibutuhkan.
 
-Saat user melakukan pendaftaran, kumpulkan data minimum terlebih dahulu.
+### Registration principle
 
-Informasi tambahan mengenai kebiasaan membaca, preferensi, atau aktivitas tilawah dapat dikumpulkan setelah user berhasil masuk jika memang diperlukan.
+Kumpulkan data minimum saat pendaftaran.
 
-> Do not make users fill forms before they understand the value of the product.
+Data tambahan mengenai kebiasaan tilawah dapat dikumpulkan setelah pengguna masuk jika memang diperlukan.
+
+> Do not make users fill unnecessary forms before they understand the value of the product.
 
 ---
 
-## 7. Reading Data Model
+# 7. Dashboard Information Hierarchy
 
-Jangan hanya menyimpan jumlah halaman sebagai data utama.
+Prioritas dashboard:
 
-Simpan data bacaan dalam bentuk data Quran yang lebih fundamental, seperti:
+1. **Lanjutkan Tilawah**
+2. **Perjalananmu**
+3. **Murojaah Hari Ini**
+4. **Aktivitas Hari Ini**
+5. Statistik/detail tambahan
 
-* surah,
-* ayat awal,
-* ayat akhir,
-* timestamp,
-* aktivitas,
-* metadata relevan.
+Dashboard bukan dashboard KPI.
 
-Contoh konseptual:
+Dashboard adalah tempat untuk kembali membaca.
+
+---
+
+# 8. Continue Reading
+
+Komponen utama dashboard adalah:
+
+> **Lanjutkan Tilawah**
+
+Contoh:
 
 ```text
-Surah: Al-Baqarah
-Start Ayah: 1
-End Ayah: 15
-Activity: tilawah
-Timestamp: ...
+Lanjutkan Tilawah
+
+Al-Baqarah
+Ayat 16
+Halaman 4
+
+[Lanjutkan →]
 ```
 
-Kemudian sistem dapat menghitung:
+Jika pengguna kembali:
 
-* halaman,
-* juz,
-* progress,
-* statistik,
-* riwayat,
-* visualisasi.
+* sistem harus mengetahui posisi terakhir,
+* pengguna tidak perlu memilih ulang surah,
+* pengguna tidak perlu memilih ulang halaman,
+* pengguna tidak perlu memasukkan data yang sudah diketahui sistem.
 
-### Why
+### New user
 
-Data mentah harus tetap tersedia agar aplikasi dapat menghasilkan berbagai jenis analitik di masa depan tanpa mengubah data historis.
+Jika belum ada history:
+
+> **Mulai perjalanan tilawahmu**
+
+> Catat bacaan pertamamu dan mulai melihat perjalananmu.
+
+CTA:
+
+> Mulai Tilawah
+
+Jangan menampilkan empty state yang terasa seperti error.
 
 ---
 
-## 8. Quran Page Mapping
+# 9. Reading Journey
 
-CatatanTilawah menggunakan konsep **halaman** sebagai satuan progress yang terlihat oleh pengguna.
+Gunakan konsep:
 
-Pengguna dapat memasukkan range ayat.
+> **Reading Journey**
 
-Sistem kemudian melakukan mapping:
+bukan sekadar Activity Tracker.
 
-> Ayat → Halaman Mushaf
+Pengguna harus dapat melihat perjalanan mereka dalam jangka panjang.
 
-Mapping harus menggunakan referensi mushaf yang jelas dan konsisten.
+Contoh:
 
-Untuk versi yang ditetapkan saat ini, gunakan referensi **Mushaf Madinah**.
+> 127 halaman
 
-Jangan hard-code asumsi seperti:
+> 3 juz telah kamu baca
 
-> "10 ayat = 1 halaman."
+Visualisasi dapat berupa:
 
-Jumlah ayat per halaman berbeda-beda tergantung posisi ayat dan surah.
+* progress halaman,
+* progress juz,
+* kalender,
+* reading history,
+* mushaf journey,
+* statistik jangka panjang.
 
-Sediakan data referensi yang memetakan ayat ke halaman.
+Progress harus menimbulkan perasaan:
 
-### Important
+> "Ternyata aku sudah sejauh ini."
 
-Jangan menyimpan hanya:
+Bukan:
+
+> "Aku masih kurang."
+
+---
+
+# 10. Gamification
+
+Gamification harus subtle.
+
+Jangan membuat UI seperti:
+
+```text
+🔥 17 Day Streak
+🏆 Level 8
+⭐ 2340 XP
+🎖 Badge
+```
+
+Gamification tidak boleh menggeser motivasi dari:
+
+> membaca Al-Qur'an
+
+menjadi:
+
+> mengumpulkan poin.
+
+Gunakan reward psikologis yang lebih natural:
+
+> "Masya Allah, minggu ini kamu sudah membaca 32 halaman."
+
+atau:
+
+> "Perjalananmu terus bertumbuh."
+
+---
+
+# 11. Quran Foundation Integration
+
+TilawahKu menggunakan Quran Foundation sebagai sumber data Quran dan layanan Quran-related tertentu.
+
+Quran Foundation **bukan identity provider utama TilawahKu**.
+
+Authentication utama pengguna tetap menjadi milik TilawahKu.
+
+Quran Foundation digunakan terutama untuk:
+
+* Quran content,
+* Quran page/layout data,
+* Quran font/page rendering,
+* search jika diperlukan,
+* audio/content-related API jika diperlukan.
+
+Quran Foundation Content API tidak membutuhkan Quran.com user account/OAuth user session dan harus dipanggil dari backend. Search juga membutuhkan backend.
+
+---
+
+# 12. Quran Foundation SDK
+
+Gunakan runtime-specific SDK entrypoints.
+
+## Backend
+
+```ts
+import { createServerClient } from "@quranjs/api/server";
+```
+
+Gunakan untuk:
+
+* Content APIs,
+* Search APIs,
+* confidential OAuth2 operations jika suatu saat diperlukan,
+* server-side rendering,
+* cron jobs,
+* workers.
+
+Quran Foundation secara eksplisit merekomendasikan `@quranjs/api/server` untuk Content dan Search.
+
+## Frontend
+
+```ts
+import { createPublicClient } from "@quranjs/api/public";
+```
+
+Gunakan **hanya jika memang membutuhkan browser/mobile-safe OAuth atau user-session flow dari Quran Foundation**.
+
+Jangan menggunakan `@quranjs/api/public` untuk Content API atau Search.
+
+Jika kebutuhan tersebut belum ada, tidak perlu menambahkan public client hanya demi kelengkapan.
+
+Quran Foundation memisahkan server dan public entrypoint untuk membuat runtime boundary jelas.
+
+---
+
+# 13. Quran Foundation Credentials
+
+Environment variables:
+
+```text
+QF_CLIENT_ID
+QF_CLIENT_SECRET
+```
+
+`QF_CLIENT_SECRET` adalah server-only secret.
+
+### NEVER
+
+Jangan pernah:
+
+* memasukkan `client_secret` ke browser,
+* memasukkan secret ke client component,
+* memasukkan secret ke public environment variable,
+* commit secret ke Git,
+* mengirim secret ke frontend.
+
+Browser tidak boleh menerima `QF_CLIENT_SECRET`.
+
+Quran Foundation secara eksplisit mencantumkan exposing `client_secret` di browser sebagai kesalahan umum.
+
+---
+
+# 14. Token Model
+
+Bedakan dua token Quran Foundation.
+
+## App Token
+
+Digunakan untuk app-level reads:
+
+* Quran Content,
+* Search.
+
+Backend mendapatkan app token menggunakan client credentials.
+
+## User Token
+
+Digunakan untuk personal Quran Foundation User APIs:
+
+* bookmarks,
+* collections,
+* notes,
+* reading progress,
+* goals,
+* preferences,
+* QuranReflect-related user data.
+
+Jangan mencampurkan kedua token tersebut.
+
+Quran Foundation menjelaskan bahwa Content/Search dan User APIs mempunyai token path yang berbeda.
+
+---
+
+# 15. TilawahKu Authentication vs Quran Foundation OAuth
+
+TilawahKu sudah mempunyai authentication sendiri.
+
+Untuk MVP:
+
+```text
+TilawahKu Auth
+    ↓
+TilawahKu User
+    ↓
+TilawahKu Database
+```
+
+Jangan mengganti authentication TilawahKu dengan Quran Foundation OAuth hanya untuk mendapatkan akses Quran Content.
+
+Quran Foundation User APIs hanya digunakan jika TilawahKu benar-benar membutuhkan integrasi dengan fitur personal Quran.com.
+
+Jangan menduplikasi identity system tanpa alasan produk yang jelas.
+
+---
+
+# 16. Quran Data Ownership
+
+### Quran Foundation
+
+Source of truth untuk Quran content dan metadata yang kita konsumsi dari API.
+
+Contoh:
+
+* chapters,
+* verses,
+* page mapping,
+* Quran font data,
+* layout metadata,
+* translations,
+* tafsir,
+* audio,
+* search.
+
+### TilawahKu Database
+
+Source of truth untuk data perjalanan pengguna.
+
+Contoh:
+
+```text
+users
+reading_records
+murojaah_records
+reading_progress
+goals
+preferences
+```
+
+Jangan menyimpan derived progress sebagai satu-satunya source of truth.
+
+---
+
+# 17. Reading Record Data Model
+
+Simpan data bacaan pada level Quran yang fundamental.
+
+Contoh:
+
+```text
+reading_record
+├── user_id
+├── activity_type
+├── chapter_id
+├── start_verse
+├── end_verse
+├── started_at
+└── completed_at
+```
+
+Jangan hanya menyimpan:
 
 ```text
 pages_read = 5
@@ -322,114 +568,206 @@ pages_read = 5
 
 sebagai sumber kebenaran utama.
 
-Lebih baik:
+Page number adalah derived information berdasarkan Mushaf/layout yang digunakan.
+
+---
+
+# 18. Mushaf Reference
+
+Untuk target Mushaf Madinah yang telah dipilih:
 
 ```text
-reading_record
-    ├── surah
-    ├── start_ayah
-    ├── end_ayah
-    ├── activity
-    └── timestamp
+Mushaf ID: 1
+QCF V2
+604 pages
 ```
 
-Kemudian halaman dihitung dari Quran page mapping.
+Gunakan mapping dari Quran Foundation.
+
+Jangan membuat asumsi seperti:
+
+> 10 ayat = 1 halaman.
+
+Jumlah ayat per halaman tidak konstan.
+
+Page mapping harus berasal dari data Mushaf yang digunakan.
 
 ---
 
-## 9. Progress Visualization
+# 19. Quran Reader Architecture
 
-Progress bukan sekadar angka.
+Untuk Quran Reader utama, gunakan pendekatan:
 
-Tujuannya adalah memberikan pengguna perasaan:
+> **QCF V2 + page layout data**
 
-> "Ternyata aku sudah sejauh ini."
+Jangan menggunakan gambar 604 halaman sebagai fondasi utama reader.
 
-Visualisasi dapat mencakup:
+Target rendering:
 
-* jumlah halaman,
-* perjalanan dari waktu ke waktu,
-* kalender aktivitas,
-* progress per juz,
-* progress mushaf,
-* riwayat bacaan,
-* reading journey.
+```text
+Quran Content
+      ↓
+page_number
+line_number
+code_v2
+      ↓
+QCF V2 font
+      ↓
+Mushaf page renderer
+```
 
-Gunakan visualisasi yang informatif tetapi tetap calm.
-
-Jangan membuat dashboard terlihat seperti dashboard KPI perusahaan.
-
----
-
-## 10. Reading Journey
-
-Gunakan konsep:
-
-> **Reading Journey**
-
-bukan sekadar:
-
-> Activity Tracker.
-
-Pengguna harus dapat melihat perjalanan mereka dalam jangka panjang.
-
-Contoh:
-
-> "Tahun ini kamu sudah membaca 1.240 halaman."
-
-Visualisasi harus memberikan rasa pencapaian dan motivasi tanpa menjadi kompetisi.
+QCF V2 digunakan untuk menghasilkan tampilan Mushaf yang sangat dekat dengan layout Mushaf fisik.
 
 ---
 
-## 11. MVP Scope
+# 20. Page-Level Rendering
 
-MVP harus fokus.
+Reader harus memahami struktur:
 
-Prioritas versi pertama:
+```text
+Page
+ ├── Line 1
+ ├── Line 2
+ ├── Line 3
+ ├── ...
+ └── Line N
+```
 
-### 1. Homepage
+Jangan berasumsi:
 
-* welcome illustration,
-* headline,
-* login,
-* Google login,
-* registration.
+```text
+Verse = Line
+```
 
-### 2. Authentication
+Satu ayat dapat berhubungan dengan struktur line/page yang berbeda.
 
-* login,
-* registration,
-* Google authentication.
-
-### 3. Dashboard
-
-* aktivitas hari ini,
-* lanjutkan tilawah,
-* informasi murojaah,
-* progress utama.
-
-### 4. Tilawah
-
-* input range ayat,
-* pencatatan bacaan,
-* konversi ayat → halaman,
-* progress.
-
-### 5. Progress
-
-* total halaman,
-* history,
-* visualisasi sederhana.
-
-Jangan menambahkan fitur hanya karena secara teknis mudah dibuat.
-
-Prioritaskan fitur berdasarkan kontribusinya terhadap pengalaman membaca dan konsistensi pengguna.
+Rendering harus mengikuti metadata page/line yang disediakan oleh Quran Foundation.
 
 ---
 
-## 12. Design System
+# 21. Quran Reader MVP Strategy
 
-### Colors
+Jangan langsung membangun reader 604 halaman.
+
+Tahap pertama:
+
+> **Prototype satu halaman Mushaf Madinah.**
+
+Target:
+
+1. Next.js
+2. Next.js backend route/server function
+3. `@quranjs/api/server`
+4. Mushaf ID 1
+5. satu page
+6. `code_v2`
+7. QCF V2 font
+8. RTL
+9. line grouping
+10. responsive mobile rendering
+
+Setelah satu halaman benar:
+
+```text
+Page 1 ↔ Page 2 ↔ Page 3
+```
+
+Kemudian:
+
+```text
+Page 1 → Page 604
+```
+
+Baru setelah itu integrasikan reading progress.
+
+---
+
+# 22. Quran Reader Performance
+
+Jangan memuat seluruh resource Quran reader sekaligus.
+
+Gunakan:
+
+* on-demand loading,
+* caching,
+* prefetch halaman terdekat jika diperlukan.
+
+Prioritaskan:
+
+```text
+Current page
+     ↓
+Previous page
+     ↓
+Next page
+```
+
+Hindari memuat 604 halaman sekaligus.
+
+---
+
+# 23. Content Sync
+
+Jangan menganggap Content Sync sebagai mekanisme untuk otomatis menyimpan seluruh core Quran reader secara lokal.
+
+Content Sync dapat digunakan untuk resource tertentu yang memang didukung oleh layanan tersebut, seperti resource content yang memerlukan synchronization/offline cache.
+
+Untuk core Quran reader MVP:
+
+> gunakan Content API + caching yang sesuai.
+
+Jangan memperkenalkan Content Sync sebelum ada kebutuhan produk yang jelas.
+
+---
+
+# 24. Quran Search
+
+Jika fitur search dibangun:
+
+```text
+Browser
+   ↓
+TilawahKu backend
+   ↓
+@quranjs/api/server
+   ↓
+Quran Foundation Search
+```
+
+Jangan memanggil Quran Foundation Search langsung dari browser menggunakan public client.
+
+Search memerlukan permission yang sesuai pada Developer Console.
+
+---
+
+# 25. Accessibility
+
+Quran Reader harus mempertimbangkan dua kebutuhan.
+
+## Mushaf Mode
+
+Prioritas:
+
+* kesetiaan terhadap layout Mushaf,
+* QCF V2,
+* page-level rendering,
+* RTL.
+
+## Accessible Text Mode
+
+Jika user membutuhkan ukuran teks besar atau layout yang lebih fleksibel:
+
+* prioritaskan readability,
+* jangan memaksakan pixel-perfect Mushaf layout,
+* gunakan text rendering yang responsif.
+
+Jangan mengorbankan accessibility hanya demi mempertahankan layout visual.
+
+---
+
+# 26. Design System
+
+## Colors
 
 ```text
 background:         #FBF4EE
@@ -442,29 +780,29 @@ border:             #E5DDD3
 card:               #FFFCF8
 ```
 
-Warna dapat berkembang, tetapi perubahan harus konsisten dan terdokumentasi.
+## Typography
 
-### Typography
-
-Primary font:
+UI font:
 
 ```text
-Plus Jakarta Sans
+Geist
 ```
 
-Hierarchy:
+Weights:
 
 ```text
-H1:   32px / 40px / bold
-H2:   24px / 32px / semibold
-H3:   20px / 28px / semibold
-Body: 16px / 24px
-Small: 14px / 20px
+Heading:    700
+Subheading: 600
+Body:       400
+Button:     500–600
+Caption:    400–500
 ```
 
-Jangan menggunakan terlalu banyak jenis font.
+Quran Arabic font/rendering harus diperlakukan sebagai sistem typography terpisah dari UI font.
 
-### Border Radius
+---
+
+# 27. Border Radius
 
 ```text
 sm:   8px
@@ -483,12 +821,14 @@ Default button:
 Default card:
 
 ```text
-16px - 20px
+16px–20px
 ```
 
-### Spacing
+---
 
-Gunakan spacing berbasis 4px:
+# 28. Spacing
+
+Gunakan sistem 4px:
 
 ```text
 4
@@ -503,9 +843,11 @@ Gunakan spacing berbasis 4px:
 64
 ```
 
-Hindari spacing arbitrary jika tidak diperlukan.
+Hindari arbitrary spacing jika tidak diperlukan.
 
-### Shadows
+---
+
+# 29. Shadows
 
 Gunakan shadow secara minimal.
 
@@ -513,18 +855,40 @@ Prioritaskan:
 
 * surface,
 * border,
-* spacing,
+* whitespace,
 * hierarchy.
 
-Daripada shadow yang berat.
+Jangan membuat UI terasa seperti dashboard SaaS dengan heavy shadows.
 
 ---
 
-## 13. Component Architecture
+# 30. shadcn / Base UI
 
-Gunakan **shadcn/ui sebagai foundation**, bukan sebagai visual identity.
+Project menggunakan:
 
-Struktur konseptual:
+* Next.js
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* Base UI
+
+shadcn/Base UI digunakan sebagai component foundation.
+
+Namun:
+
+> **shadcn is not the visual identity of TilawahKu.**
+
+Gunakan component foundation untuk behavior/accessibility/reusability.
+
+Visual identity berasal dari design system TilawahKu.
+
+Jangan membiarkan default styling library menentukan seluruh tampilan aplikasi.
+
+---
+
+# 31. Component Architecture
+
+Gunakan struktur konseptual:
 
 ```text
 components/
@@ -542,39 +906,31 @@ components/
 │   └── page-header
 │
 └── tilawah/
-    ├── reading-progress
-    ├── reading-streak
     ├── continue-reading
-    └── reading-history
+    ├── reading-progress
+    ├── reading-journey
+    ├── reading-history
+    ├── murojaah-summary
+    └── quran-reader
 ```
-
-### Rules
 
 `ui/`:
 
-Komponen generik dan reusable.
+Generic reusable UI components.
 
 `brand/`:
 
-Komponen yang merepresentasikan identitas CatatanTilawah.
+TilawahKu brand-specific components.
 
 `tilawah/`:
 
-Komponen khusus domain produk.
-
-Jangan mengubah semua komponen shadcn secara global hanya untuk satu kebutuhan spesifik.
-
-Jangan membuat komponen baru jika komponen existing dapat digunakan dengan extension yang sederhana.
-
-Sebaliknya, jangan memaksa komponen shadcn jika kebutuhan UX memang membutuhkan komponen domain-specific.
+Domain-specific components.
 
 ---
 
-## 14. Frontend Philosophy
+# 32. Frontend Architecture
 
-Project menggunakan pendekatan modern React/Next.js dan TypeScript.
-
-Prioritas:
+Priorities:
 
 1. UX clarity
 2. Accessibility
@@ -582,93 +938,312 @@ Prioritas:
 4. Performance
 5. Visual polish
 
-Jangan mengorbankan UX hanya karena implementasi teknis lebih mudah.
+Do not sacrifice UX because an implementation is easier.
 
-Jangan mengorbankan maintainability hanya demi membuat demo terlihat bagus.
-
----
-
-## 15. Agent Behavior
-
-Sebelum mengimplementasikan fitur besar:
-
-1. Pahami tujuan UX.
-2. Periksa design system.
-3. Periksa komponen existing.
-4. Jangan membuat pola baru jika pola existing sudah tersedia.
-5. Implementasikan solusi paling sederhana yang memenuhi kebutuhan.
-6. Pastikan responsive.
-7. Pastikan accessibility.
-8. Jalankan lint/typecheck/test yang relevan.
-9. Review hasil implementasi terhadap prinsip desain CatatanTilawah.
-
-Jika requirement tidak jelas, **jangan menebak untuk keputusan produk yang signifikan**.
-
-Untuk detail kecil yang tidak berdampak pada UX atau architecture, gunakan judgment yang konsisten dengan design system.
+Do not sacrifice maintainability merely to make a demo look impressive.
 
 ---
 
-## 16. Things To Avoid
+# 33. Responsive Design
 
-Jangan:
+Mobile is the primary experience.
 
-* membuat UI seperti dashboard SaaS generik,
-* menggunakan terlalu banyak warna,
-* menggunakan terlalu banyak card,
-* membuat gamification terasa seperti game,
-* menggunakan streak sebagai mekanisme tekanan,
-* menyalahkan user karena tidak konsisten,
-* meminta user memasukkan data yang sebenarnya bisa dihitung sistem,
-* menyimpan derived data sebagai satu-satunya source of truth,
-* menambahkan fitur tanpa alasan UX,
-* membuat halaman penuh informasi hanya karena data tersedia,
-* mengganti design token tanpa alasan,
-* mengabaikan responsive mobile,
-* mengubah visual identity hanya karena default shadcn terlihat bagus.
-
----
-
-## 17. Decision Making
-
-Ketika terdapat dua pilihan implementasi, prioritaskan:
+Target mobile widths:
 
 ```text
-User value
-    ↓
-UX simplicity
-    ↓
-Consistency with design system
-    ↓
-Maintainability
-    ↓
-Implementation convenience
+360px
+390px
+412px
 ```
 
-Jangan membalik prioritas tersebut.
+The application must remain usable on larger screens.
 
-Kemudahan coding bukan alasan yang cukup untuk memilih UX yang lebih buruk.
+Avoid hard-coded absolute positioning when responsive layout can solve the problem.
+
+Prefer:
+
+* flex,
+* grid,
+* max-width,
+* responsive padding,
+* responsive typography.
 
 ---
 
-## 18. Current Product Direction
+# 34. Agent Workflow
 
-CatatanTilawah saat ini sedang berada pada tahap **product/design exploration**.
+Before implementing a significant feature:
 
-Jangan menganggap semua detail sudah final.
+1. Understand the product goal.
+2. Read relevant `AGENTS.md` instructions.
+3. Inspect existing architecture.
+4. Inspect existing components.
+5. Inspect existing design tokens.
+6. Reuse existing patterns.
+7. Implement the smallest correct solution.
+8. Test responsive behavior.
+9. Test accessibility.
+10. Run lint/typecheck/tests.
+11. Compare the result against the intended UX/design.
 
-Namun keputusan berikut dianggap sebagai baseline:
+Do not create new architecture unnecessarily.
+
+---
+
+# 35. Product Decisions vs Implementation Decisions
+
+Agent may make reasonable implementation decisions for:
+
+* variable names,
+* component extraction,
+* internal helper functions,
+* minor spacing adjustments,
+* implementation details.
+
+Agent must not silently change significant product decisions such as:
+
+* homepage structure,
+* dashboard hierarchy,
+* primary CTA,
+* authentication flow,
+* Quran reader architecture,
+* Mushaf reference,
+* design system colors,
+* product UX philosophy.
+
+If a significant change appears beneficial, explain the reason before changing it.
+
+---
+
+# 36. Things To Avoid
+
+Do not:
+
+* build a generic SaaS dashboard,
+* use excessive colors,
+* use excessive cards,
+* make gamification feel like a game,
+* use streaks as pressure,
+* shame users for inconsistency,
+* ask users for data the system can derive,
+* store derived page progress as the only source of truth,
+* call Quran Content API directly from the browser,
+* call Quran Search directly from the browser,
+* expose Quran Foundation client secrets,
+* use `@quranjs/api/public` for Content/Search,
+* start new Quran Foundation integrations with the legacy root `QuranClient`,
+* load all 604 Quran pages/resources at once,
+* replace QCF page rendering with arbitrary HTML text when Mushaf fidelity is required,
+* create a 604-image reader without a specific product/performance reason,
+* add features simply because the underlying API supports them,
+* introduce Quran Foundation OAuth unless the product actually needs its User APIs,
+* add features without a UX reason.
+
+---
+
+# 37. Testing Quran Reader
+
+Before considering Quran Reader implementation complete, verify:
+
+### Data
+
+* correct Mushaf ID,
+* correct page number,
+* correct verse range,
+* correct line grouping,
+* correct `code_v2`.
+
+### Rendering
+
+* correct QCF V2 font,
+* RTL,
+* correct page proportions,
+* mobile readability,
+* no text clipping,
+* no unexpected wrapping.
+
+### Navigation
+
+* previous page,
+* next page,
+* direct page navigation,
+* loading state,
+* error state.
+
+### Performance
+
+* current page loads quickly,
+* nearby page prefetching works if enabled,
+* no unnecessary 604-page loading,
+* caching behaves correctly.
+
+### Tracking
+
+Reader position must be convertible into TilawahKu reading progress without requiring duplicate manual input.
+
+---
+
+# 38. MVP Scope
+
+Version 1 should focus on:
+
+## Homepage
+
+* welcome illustration/animation,
+* Login,
+* Google,
+* registration.
+
+## Authentication
+
+* login,
+* registration,
+* Google authentication.
+
+## Dashboard
+
+* Continue Reading,
+* today's activity,
+* Reading Journey,
+* Murojaah summary.
+
+## Tilawah
+
+* record reading range,
+* verse-to-page mapping,
+* reading progress.
+
+## Quran Reader Prototype
+
+First implement:
+
+> one QCF V2 Mushaf Madinah page.
+
+Then expand to multi-page navigation.
+
+## Progress
+
+* pages read,
+* history,
+* basic visual journey.
+
+Do not implement every Quran Foundation API feature in MVP.
+
+---
+
+# 39. Current Architecture
+
+The current target architecture is:
+
+```text
+                         TILAWAHKU
+                             │
+              ┌──────────────┴──────────────┐
+              │                             │
+        TilawahKu Auth                TilawahKu DB
+              │                             │
+              │                     ┌───────┼────────┐
+              │                     │       │        │
+              │                 Tilawah  Murojaah  Progress
+              │
+              └──────────────┬──────────────┘
+                             │
+                       Next.js App
+                             │
+                 ┌───────────┴───────────┐
+                 │                       │
+             Frontend                Backend
+                 │                       │
+                 │              @quranjs/api/server
+                 │                       │
+                 │                       ↓
+                 │              Quran Foundation
+                 │                       │
+                 │           ┌───────────┼───────────┐
+                 │           │           │           │
+                 │        Content      Pages       Search
+                 │           │           │           │
+                 └───────────┴──────┬────┴───────────┘
+                                    ↓
+                              Quran Reader
+                                    │
+                              QCF V2 Rendering
+                                    │
+                             Mushaf Madinah
+                              604 pages
+```
+
+If a Quran Foundation public OAuth/user-session feature is later required, use:
+
+```text
+Frontend
+   ↓
+@quranjs/api/public
+```
+
+while keeping confidential/server operations in:
+
+```text
+Backend
+   ↓
+@quranjs/api/server
+```
+
+---
+
+# 40. Current Product Direction
+
+The following decisions are baseline decisions:
 
 * Support, not pressure.
-* Homepage sederhana dan welcoming.
-* Dashboard berbasis "hari ini".
-* Tilawah dan murojaah merupakan dua aktivitas utama.
-* Reading Journey lebih penting daripada sekadar activity tracker.
-* Halaman adalah satuan progress yang terlihat oleh user.
-* Data bacaan disimpan pada level ayat/range ayat.
-* Page mapping menggunakan referensi Mushaf Madinah.
-* shadcn/ui digunakan sebagai foundation.
-* Visual identity dibuat khusus untuk CatatanTilawah.
-* Mobile experience adalah prioritas.
-* UX didahulukan sebelum menambah fitur.
+* Homepage is simple and welcoming.
+* Dashboard is based around "today".
+* Tilawah and Murojaah are the two primary activities.
+* Reading Journey is more important than a generic activity tracker.
+* Page is the primary visible unit of Quran reading progress.
+* Reading records should preserve verse/range-level data.
+* Mushaf Madinah / QCF V2 is the target Mushaf rendering.
+* Quran Foundation is the Quran data provider.
+* TilawahKu owns user identity and user journey data.
+* Content/Search use Quran Foundation server APIs.
+* Quran Foundation `client_secret` is server-only.
+* shadcn/Base UI is a foundation, not the visual identity.
+* Geist is the UI font.
+* Mobile experience is the priority.
+* UX comes before feature count.
+* Quran Reader should be proven with one page before expanding to 604 pages.
 
-Jika keputusan produk baru dibuat, update dokumentasi ini agar agent berikutnya memiliki konteks yang sama.
+---
+
+# 41. Source of Truth for New Decisions
+
+When a new product or technical decision is made:
+
+1. Prefer the latest explicit product decision from the project owner.
+2. Check existing architecture before introducing a new pattern.
+3. Check the current Quran Foundation documentation for Quran Foundation integrations.
+4. Update this file when a decision becomes a stable project rule.
+5. Do not silently overwrite established product decisions.
+
+For Quran Foundation integration, prefer the current official documentation and runtime-specific SDK guidance over older examples or legacy integrations.
+
+Official references:
+
+* Developer Journey: https://api-docs.quran.foundation/docs/developer-journey/
+* JavaScript SDK: https://api-docs.quran.foundation/docs/sdk/javascript/
+* App Shapes: https://api-docs.quran.foundation/docs/sdk/javascript/app-shapes/
+* Runtime Matrix: https://api-docs.quran.foundation/docs/sdk/javascript/runtime-matrix/
+* Auth Matrix: https://api-docs.quran.foundation/docs/sdk/javascript/auth-matrix/
+* Font Rendering: https://api-docs.quran.foundation/docs/tutorials/fonts/font-rendering/
+* Page Layout: https://api-docs.quran.foundation/docs/tutorials/fonts/page-layout/
+* Content Sync: https://api-docs.quran.foundation/docs/tutorials/content-sync/getting-started/
+
+---
+
+# 42. Final Product Principle
+
+Every feature should answer:
+
+> **Does this help the user continue their Quran journey with less friction and more encouragement?**
+
+If the answer is no, question whether the feature belongs in TilawahKu.

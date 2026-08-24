@@ -10,6 +10,7 @@ import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { GoogleOneTap } from "@/components/auth/google-one-tap";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -48,6 +49,7 @@ export default function RegisterPage() {
 
   return (
     <main className="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-6 py-8" style={{ background: "#FBF4EE" }}>
+      <GoogleOneTap />
       <div className="w-full max-w-md bg-[#FFFCF8] rounded-[24px] p-8 shadow-sm border border-[#E5DDD3]">
         <div className="mb-8 flex flex-col gap-2 text-center">
           <h1 className="text-2xl font-bold text-foreground">Buat Akun</h1>
