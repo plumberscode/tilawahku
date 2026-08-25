@@ -25,7 +25,7 @@ export default async function QuranReaderPage3() {
             className="inline-flex items-center gap-1.5 text-sm font-medium text-[#628A45] hover:text-[#527739] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Kembali ke Dashboard</span>
+            <span>Simpan Bacaan</span>
           </Link>
 
           {/* Page Switcher Tabs for Comparison */}

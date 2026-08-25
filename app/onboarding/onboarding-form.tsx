@@ -379,7 +379,7 @@ export function OnboardingForm({ userName }: OnboardingFormProps) {
               ? "Mulai Tilawah"
               : selectedPage >= 604
               ? "Simpan & Selesai"
-              : `Simpan & Lanjutkan ke Hal. ${nextReadingPage}`}
+              : "Simpan & Lanjutkan"}
           </span>
           {!isPending && <ArrowRight className="w-4 h-4" />}
         </button>

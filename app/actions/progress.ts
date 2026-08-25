@@ -41,12 +41,8 @@ export async function submitOnboardingProgress(
   try {
     const updated = await saveInitialProgress(session.user.id, safePage);
 
-    let redirectUrl = `/prototype/quran-reader?page=${updated.currentPage}`;
-
-    // If already finished the entire Quran (604 pages), redirect to dashboard to celebrate
-    if (updated.isCompleted) {
-      redirectUrl = "/dashboard";
-    }
+    // Redirect to dashboard (menu) after completing onboarding setup
+    const redirectUrl = "/dashboard";
 
     return {
       success: true,

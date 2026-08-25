@@ -86,16 +86,9 @@ export function QuranReaderView({
 
   const zoomPercent = Math.round(zoom * 100);
 
-  const handleBackToDashboard = (e: React.MouseEvent) => {
+  const handleSaveReading = (e: React.MouseEvent) => {
     e.preventDefault();
-    const timeSpent = (Date.now() - sessionStartTime) / 1000;
-    const hasUnconfirmedActivity = currentPage !== initialPage || timeSpent > 5;
-    
-    if (hasUnconfirmedActivity) {
-      setShowConfirmation(true);
-    } else {
-      router.push("/dashboard");
-    }
+    setShowConfirmation(true);
   };
 
   // Combine verses for the modal
@@ -114,11 +107,11 @@ export function QuranReaderView({
       <div className="w-full max-w-[1240px] mb-6 sm:mb-8 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <button
-            onClick={handleBackToDashboard}
+            onClick={handleSaveReading}
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-[#628A45] hover:text-[#527739] transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Kembali ke Dashboard</span>
+            <span>Simpan Bacaan</span>
           </button>
 
           {/* Right Action Group: Zoom Controls + Menu */}
