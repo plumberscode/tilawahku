@@ -8,6 +8,7 @@ export async function confirmReadingSessionAction(data: {
   surahNumber: number;
   endVerse: number;
   pageNumber: number;
+  nextPage?: number;
   durationSeconds?: number;
 }) {
   try {
@@ -19,7 +20,7 @@ export async function confirmReadingSessionAction(data: {
       return { success: false, error: "Unauthorized" };
     }
 
-    const { surahNumber, endVerse, pageNumber, durationSeconds } = data;
+    const { surahNumber, endVerse, pageNumber, nextPage, durationSeconds } = data;
 
     if (!surahNumber || !endVerse || !pageNumber) {
       return { success: false, error: "Invalid data" };
@@ -30,7 +31,8 @@ export async function confirmReadingSessionAction(data: {
       surahNumber,
       endVerse,
       pageNumber,
-      durationSeconds || 0
+      durationSeconds || 0,
+      nextPage
     );
 
     return { success: true, progress };

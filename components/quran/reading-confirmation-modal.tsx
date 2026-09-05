@@ -62,10 +62,27 @@ export function ReadingConfirmationModal({
     }
 
     try {
+      const pageNumber = selected.pageNumber || currentPage;
+
+      // Tentukan halaman bacaan berikutnya tanpa panggilan jaringan.
+      // Jika ayat terpilih adalah ayat terakhir pada halamannya, lanjut ke
+      // halaman berikutnya; jika tidak, lanjut di halaman yang sama.
+      const isLastVerseOnPage = !verseOptions.some((o) => {
+        if (o.pageNumber !== pageNumber) return false;
+        const selOrder = selected.surahNum * 1000 + selected.verseNum;
+        const oOrder = o.surahNum * 1000 + o.verseNum;
+        return oOrder > selOrder;
+      });
+
+      const nextPage = isLastVerseOnPage
+        ? Math.min(pageNumber + 1, 604)
+        : pageNumber;
+
       const res = await confirmReadingSessionAction({
         surahNumber: selected.surahNum,
         endVerse: selected.verseNum,
-        pageNumber: selected.pageNumber || currentPage,
+        pageNumber,
+        nextPage,
       });
 
       if (res.success) {

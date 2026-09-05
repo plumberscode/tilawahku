@@ -97,7 +97,8 @@ export async function saveConfirmedReading(
   surahNumber: number,
   endVerse: number,
   pageNumber: number,
-  durationSeconds: number = 0
+  durationSeconds: number = 0,
+  nextPageOverride?: number
 ) {
   const { readingRecord } = await import("./schema");
   const { SURAH_MAP } = await import("@/lib/quran/surahs-data");
@@ -124,23 +125,13 @@ export async function saveConfirmedReading(
     }
   }
 
-  // 2. Dapatkan halaman dari nextSurah & nextVerse
-  let nextPage = 604;
-  if (!isCompleted) {
-    try {
-      const res = await fetch(`https://api.quran.com/api/v4/verses/by_key/${nextSurah}:${nextVerse}?fields=page_number`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.verse?.page_number) {
-          nextPage = data.verse.page_number;
-        }
-      }
-    } catch (e) {
-      console.error("Failed to fetch next page", e);
-      // Fallback if fetch fails
-      nextPage = pageNumber; 
-    }
-  }
+  // 2. Halaman bacaan berikutnya (untuk "Lanjutkan Tilawah").
+  // Tidak melakukan fetch jaringan ke api.quran.com lagi (penyebab loading lama).
+  // nextPageOverride dihitung dari data Mushaf yang benar-benar ditampilkan pada
+  // reader (dikirim dari client); jika tidak ada, fallback aman ke pageNumber.
+  const nextPage = isCompleted
+    ? 604
+    : Math.min(Math.max(1, nextPageOverride ?? pageNumber), 604);
 
   const existing = await getUserProgress(userId);
   let startVerse = null;
