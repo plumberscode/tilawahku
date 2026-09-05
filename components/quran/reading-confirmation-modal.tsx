@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Bookmark, Loader2 } from "lucide-react";
 import { confirmReadingSessionAction } from "@/app/actions/reading-session";
@@ -25,6 +25,15 @@ export function ReadingConfirmationModal({
   const router = useRouter();
   const [selectedVerseKey, setSelectedVerseKey] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Prefetch route /dashboard begitu modal dibuka, supaya saat pengguna
+  // menekan "Simpan Bacaan" navigasinya sudah tidak menunggu shell halaman
+  // di-fetch dari nol — sisa waktu tunggu murni untuk aksi penyimpanan data.
+  useEffect(() => {
+    if (isOpen) {
+      router.prefetch("/dashboard");
+    }
+  }, [isOpen, router]);
 
   if (!isOpen) return null;
 

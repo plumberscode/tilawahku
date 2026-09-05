@@ -15,7 +15,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { auth } from "@/lib/auth";
-import { getUserProgress } from "@/lib/db/progress";
+import { getUserProgress, getUserWeeklyActivity } from "@/lib/db/progress";
 import { getMurojaahPlan } from "@/lib/db/murojaah";
 import { getSurahByPage, getJuzByPage } from "@/lib/quran/surahs-data";
 import { ProfileMenu } from "./profile-menu";
@@ -36,10 +36,13 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  // Fetch user reading progress and active murojaah plan from database
-  const [progress, murojaahPlan] = await Promise.all([
+  // Fetch user reading progress, active murojaah plan, and 7-day activity
+  // in parallel — semuanya hanya butuh userId, tidak saling bergantung, jadi
+  // tidak perlu menunggu satu selesai baru memulai yang lain.
+  const [progress, murojaahPlan, activityDays] = await Promise.all([
     getUserProgress(session.user.id),
     getMurojaahPlan(session.user.id),
+    getUserWeeklyActivity(session.user.id),
   ]);
 
   // If new user and onboarding is not yet completed, redirect to onboarding
@@ -64,10 +67,6 @@ export default async function DashboardPage() {
 
   // Juz slider percentage
   const juzPercent = Math.min(Math.max((currentJuz / 30) * 100, 3), 97);
-
-  // Real 7 days activity data (Sen - Min)
-  const { getUserWeeklyActivity } = await import("@/lib/db/progress");
-  const activityDays = await getUserWeeklyActivity(session.user.id);
 
   return (
     <main
