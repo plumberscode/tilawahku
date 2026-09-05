@@ -139,8 +139,12 @@ export async function saveConfirmedReading(
     startVerse = existing.lastVerse ? existing.lastVerse + 1 : 1;
   }
 
-  // 3. Insert Reading Record
-  await db.insert(readingRecord).values({
+  // 3. Insert Reading Record & 4. Update Reading Progress
+  // Kedua operasi ini independen satu sama lain (progress hanya bergantung
+  // pada `existing` yang sudah kita ambil di atas), jadi jalankan bersamaan
+  // alih-alih menunggu insert selesai dulu baru update — ini menghemat satu
+  // round-trip DB penuh dari total waktu "Simpan Bacaan".
+  const insertRecordPromise = db.insert(readingRecord).values({
     id: crypto.randomUUID(),
     userId,
     surahNumber,
@@ -151,47 +155,43 @@ export async function saveConfirmedReading(
     createdAt: new Date(),
   });
 
-  // 4. Update Reading Progress
-  if (existing) {
-    const [updated] = await db
-      .update(readingProgress)
-      .set({
-        lastSurah: surahNumber,
-        lastVerse: endVerse,
-        nextSurah: nextSurah,
-        nextVerse: nextVerse,
-        currentPage: nextPage,
-        completedPages: isCompleted ? 604 : pageNumber,
-        isCompleted: isCompleted,
-        updatedAt: new Date(),
-      })
-      .where(eq(readingProgress.userId, userId))
-      .returning();
+  const progressPromise = existing
+    ? db
+        .update(readingProgress)
+        .set({
+          lastSurah: surahNumber,
+          lastVerse: endVerse,
+          nextSurah: nextSurah,
+          nextVerse: nextVerse,
+          currentPage: nextPage,
+          completedPages: isCompleted ? 604 : pageNumber,
+          isCompleted: isCompleted,
+          updatedAt: new Date(),
+        })
+        .where(eq(readingProgress.userId, userId))
+        .returning()
+    : db
+        .insert(readingProgress)
+        .values({
+          id: crypto.randomUUID(),
+          userId,
+          lastSurah: surahNumber,
+          lastVerse: endVerse,
+          nextSurah: nextSurah,
+          nextVerse: nextVerse,
+          currentPage: nextPage,
+          completedPages: isCompleted ? 604 : pageNumber,
+          isCompleted: isCompleted,
+          initialPage: 0,
+          onboardingCompleted: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
 
-    return updated;
-  } else {
-    // If somehow onboarding isn't done, but they read
-    const [inserted] = await db
-      .insert(readingProgress)
-      .values({
-        id: crypto.randomUUID(),
-        userId,
-        lastSurah: surahNumber,
-        lastVerse: endVerse,
-        nextSurah: nextSurah,
-        nextVerse: nextVerse,
-        currentPage: nextPage,
-        completedPages: isCompleted ? 604 : pageNumber,
-        isCompleted: isCompleted,
-        initialPage: 0,
-        onboardingCompleted: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .returning();
-      
-    return inserted;
-  }
+  const [, [progressRow]] = await Promise.all([insertRecordPromise, progressPromise]);
+
+  return progressRow;
 }
 
 /**
