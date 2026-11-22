@@ -45,7 +45,9 @@ interface ApiPageResponse {
 export async function getQuranPage(pageNumber: number = 2): Promise<QuranPageData> {
   const safePageNumber = Math.min(Math.max(1, pageNumber), 604);
   const wordFields = "code_v2,text_qpc_hafs,text_uthmani,line_number,page_number,location";
-  const url = `https://api.quran.com/api/v4/verses/by_page/${safePageNumber}?mushaf=1&words=true&word_fields=${wordFields}`;
+  // language=id → terjemahan per kata (word-by-word) dalam Bahasa Indonesia.
+  // Tanpa parameter ini, API mengembalikan terjemahan default Bahasa Inggris.
+  const url = `https://api.quran.com/api/v4/verses/by_page/${safePageNumber}?mushaf=1&words=true&language=id&word_fields=${wordFields}`;
 
   const headers: HeadersInit = {
     Accept: "application/json",
