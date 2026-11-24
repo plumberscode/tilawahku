@@ -25,7 +25,7 @@ export async function getUserProgress(userId: string): Promise<UserProgress | nu
  *   initialPage = 0, completedPages = 0, currentPage = 1, isCompleted = false, onboardingCompleted = true
  *
  * - completedPage = 187 (Contoh):
- *   initialPage = 187, completedPages = 187, currentPage = 188, isCompleted = false, onboardingCompleted = true
+ *   initialPage = 187, completedPages = 187, currentPage = 187, isCompleted = false, onboardingCompleted = true
  *
  * - completedPage = 604 ("Khatam"):
  *   initialPage = 604, completedPages = 604, currentPage = 604, isCompleted = true, onboardingCompleted = true
@@ -48,7 +48,7 @@ export async function saveInitialProgress(
     currentPage = 604; // Edge case: tidak boleh menjadi 605
     isCompleted = true;
   } else {
-    currentPage = safePage + 1; // Halaman berikutnya untuk "Lanjutkan Tilawah"
+    currentPage = safePage; // "Lanjutkan Tilawah" dimulai tepat di halaman yang dipilih
     isCompleted = false;
   }
 
@@ -63,6 +63,13 @@ export async function saveInitialProgress(
         currentPage,
         isCompleted,
         onboardingCompleted: true,
+        // Posisi diatur ulang manual pada level halaman: hapus posisi ayat lama
+        // agar dashboard tidak lagi menampilkan surah/ayat dari sesi sebelumnya.
+        // Surah akan diturunkan dari currentPage sampai sesi bacaan berikutnya.
+        lastSurah: null,
+        lastVerse: null,
+        nextSurah: null,
+        nextVerse: null,
         updatedAt: new Date(),
       })
       .where(eq(readingProgress.userId, userId))

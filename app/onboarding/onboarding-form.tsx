@@ -33,7 +33,7 @@ export function OnboardingForm({ userName }: OnboardingFormProps) {
   // Derived metadata for the currently selected page
   const currentSurah = getSurahByPage(selectedPage);
   const currentJuz = getJuzByPage(selectedPage);
-  const nextReadingPage = selectedPage >= 604 ? 604 : selectedPage + 1;
+  const nextReadingPage = selectedPage;
 
   // Filter surahs for quick search jump
   const filteredSurahs = SURAHS.filter(

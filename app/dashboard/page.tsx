@@ -173,7 +173,7 @@ export default async function DashboardPage() {
                     {currentSurah.nameSimple}
                   </h2>
                   <p className="text-xs sm:text-sm text-[#6A6054] font-medium mt-0.5">
-                    Ayat {progress.nextVerse || 16} • Halaman {currentPage}
+                    {progress.nextVerse ? `Ayat ${progress.nextVerse} • ` : ""}Halaman {currentPage}
                   </p>
                 </div>
 
@@ -234,7 +234,7 @@ export default async function DashboardPage() {
             {/* Left: Total Pages */}
             <div className="col-span-5 flex flex-col justify-center">
               <span className="text-3xl sm:text-4xl font-extrabold text-[#2C261F] tracking-tight leading-none">
-                {completedPages || 127}
+                {completedPages}
               </span>
               <span className="text-xs font-bold text-[#3B342D] mt-1.5">
                 halaman

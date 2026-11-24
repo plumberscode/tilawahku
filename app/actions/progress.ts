@@ -1,6 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { saveInitialProgress } from "@/lib/db/progress";
 
@@ -40,6 +41,7 @@ export async function submitOnboardingProgress(
 
   try {
     const updated = await saveInitialProgress(session.user.id, safePage);
+    revalidatePath("/dashboard");
 
     // Redirect to dashboard (menu) after completing onboarding setup
     const redirectUrl = "/dashboard";
